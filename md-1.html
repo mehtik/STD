@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIMPLE TO DO LIST</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .title {
+            color: hsl(60, 90%, 81%);
+            font-weight: bold;
+            padding: 20px;
+            font-size: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            background-color:hsl(0, 76%, 26%);
+            border-style: solid;
+            border-radius: 16px 16px 50px 50px;
+            border-color: hsl(0, 76%, 26%);
+        }
+
+        .header .block {
+            margin: 10px auto;
+        }
+        #main .block {
+            margin: 10px;
+            float: left;
+        }
+
+        .block {
+            text-align: center;
+            border-style: solid;
+            border-radius: 20px;
+            width: 300px;
+            background-color: hsl(60, 90%, 81%);
+            border-color: hsl(0, 76%, 26%);
+        }
+        #main {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .content {
+            padding: 10px;
+            overflow-y: auto;
+            height: 150px;
+        }
+        body {
+            background-image:url("all1.png");
+            background-repeat: no-repeat;
+            background-color: #feff92;
+            font-family: Comic Sans MS;
+        }
+        input[type=text] {
+            width: 90%;
+        }
+        textarea {
+            margin-top: 5px;
+            width: 90%;
+            height: 70%;
+        }
+        button {
+            margin:10px;
+        }
+        .add-todo {
+            background-color:black;
+            color:white;
+            border-color:black;
+            border-radius: 8px;
+        }
+        .remove-todo {
+            background-color:hsl(0, 76%, 26%);
+            color:white;
+            border-color:black;
+            border-radius: 8px;
+        }
+        .remove-todo:hover {
+            background-color:black;
+            color:white;
+            border-color:black;
+            border-radius: 8px;
+        }
+        .done-todo {
+            background-color:hsl(133, 76%, 17%);
+            color:white;
+            border-color:black;
+            border-radius: 8px;
+        }
+        .done-todo:hover {
+            background-color:black;
+            color:white;
+            border-color:black;
+            border-radius: 8px;
+        }
+        .todo.completed .title,
+        .todo.completed .content{
+            text-decoration: line-through;
+        }
+        #settings {
+            text-align: center;
+        }
+
+        @media only screen and (max-width: 1295px){
+            #main .block {
+                margin: 10px auto;
+            }
+        }
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+      
+</head>
+<body>
+    <div class="header">
+        <div class="block">
+            <div class="title">
+                New todo
+            </div>
+            <div class="content">
+                <input type="text"
+                placeholder="Enter Your Title"
+                id="new-title" />
+                <textarea placeholder="Enter Your Content"
+                id="new-content"
+                ></textarea>
+            </div>
+            <div class="actions">
+                <button id="add-todo" class="add-todo">
+                    Add todo
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="settings">
+        <label for="show-all">
+            <input type="radio" name="what-to-show" id="show-all" value="show-all" checked />
+            all
+        </label>
+        <label for="show-completed">
+            <input type="radio" name="what-to-show" id="show-completed" value="show-completed" />
+            completed
+        </label>
+        <label for="show-not-completed">
+            <input type="radio" name="what-to-show" id="show-not-completed" value="show-not-completed" />
+            not completed
+        </label>
+    </div>
+
+    <div id="main">
+    </div>
+
+    <div id="sample" style="display:none">
+        <div class="block todo">
+            <div class="title">
+                title
+            </div>
+            <div class="content">
+                content
+            </div>
+            <div class="actions">
+                <button class="done-todo">
+                    Mark Done
+                </button>
+                <button class="remove-todo">
+                    Remove Todo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        const sample_text = "Louis-Ferdinand Céline was the pen name of Louis Ferdinand Auguste Destouchesa French novelist, pamphleteer and physician. He developed a new style of writing that modernized French literature. ";
+        const sample_long_text = "His most famous work is the 1932 novel Journey to the End of the Night.Céline used a working-class, spoken style of language in his writings, and attacked what he considered to be the overly polished, bourgeois language of the academy. His works influenced a broad array of literary figures, not only in France but also in the English-speaking world and elsewhere in the Western World; this includes authors associated with modernism, existentialism, black comedy and the Beat Generation.";
+        
+        const addTodo = function(title, content){
+            $("#main").append(
+                $("#sample").html()
+            )
+            $("#main").children(".todo:last").children('.title').text(title);
+            $("#main").children(".todo:last").children('.content').text(content);
+        }
+
+        $(document).ready(function(){
+            addTodo('Mark Done',"You can mark a todo object by clicking on the Mark Done button.");
+            addTodo('Remove Todo',"You can remove a todo object by clicking on the Remove Todo button.");
+            addTodo('sample_text 1',sample_text);
+            addTodo('sample_text 2',sample_text);
+            addTodo('sample_text 3',sample_long_text);
+            addTodo('sample_text 4',sample_text);
+
+            $("#add-todo").click(function(){
+                
+                if($("#new-title").val() == ''){
+                    alert("!!! Title Can't Be Empty !!!");
+                } else {
+                    addTodo(
+                        $("#new-title").val(),
+                        $("#new-content").val(),
+                    )
+                }
+            })
+
+            $(document).on('click', '.remove-todo', function(){
+                $(this).parent().parent().remove()
+            });
+
+            $(document).on('click', '.done-todo', function(){
+                let todo = $(this).parent().parent();
+                if(todo.hasClass('completed')){
+                    todo.removeClass('completed');
+                    $(this).html("Mark Done")
+                    if($("input[name=what-to-show]:checked").val() == "show-completed"){
+                        todo.hide();
+                    }
+                } else {
+                    todo.addClass('completed');
+                    $(this).html("Un-Mark")
+                    if($("input[name=what-to-show]:checked").val() == "show-not-completed"){
+                        todo.hide();
+                    }
+                }
+            });
+
+            $("input[name=what-to-show]").click(function(){
+                if($(this).val() == "show-all"){
+                    document.getElementsByTagName("body")[0].style.backgroundImage = 'url("all1.png")';
+                    $('.todo').show();
+                } else if($(this).val() == "show-completed"){
+                    document.getElementsByTagName("body")[0].style.backgroundImage = 'url("completed1.png")';
+                    $('.todo').hide();
+                    $('.todo.completed').show();
+                } else {
+                    document.getElementsByTagName("body")[0].style.backgroundImage = 'url("ncompleted1.png")';
+                    $('.todo').show();
+                    $('.todo.completed').hide();
+                }
+            })
+        })
+    </script>
+
+    
+</body>
+</html>
